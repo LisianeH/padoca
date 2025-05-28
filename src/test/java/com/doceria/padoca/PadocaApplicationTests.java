@@ -9,5 +9,4 @@ class PadocaApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
