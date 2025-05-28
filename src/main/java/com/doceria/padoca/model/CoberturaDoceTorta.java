@@ -2,8 +2,7 @@ package com.doceria.padoca.model;
 
 public enum CoberturaDoceTorta {
     CHANTILLY( "Chantilly" ),
-    NATA( "Nata" ),
-    PALMITO( "Palmito" );
+    NATA( "Nata" );
 
     private final String descricao;
 
