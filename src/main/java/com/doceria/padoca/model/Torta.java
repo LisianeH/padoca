@@ -12,6 +12,14 @@ public abstract class Torta {
 
     public abstract void preparar();
 
+    public void exibirDetalhes() {
+        System.out.println( "\n--- Encomenda ---" );
+        System.out.println( "Tamanho: " + tamanho );
+        System.out.println( "Camadas: " + camada );
+        System.out.println( "Recheio: " + recheio );
+        System.out.println( "Cobertura: " + cobertura );
+    }
+
     public String getRecheio() {
         return recheio;
     }

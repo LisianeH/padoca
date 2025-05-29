@@ -1,5 +1,7 @@
 package com.doceria.padoca;
 
+import com.doceria.padoca.decorator.CartaoPresente;
+import com.doceria.padoca.decorator.EmbalagemEspecial;
 import com.doceria.padoca.model.*;
 import com.doceria.padoca.service.CamadaService;
 import com.doceria.padoca.service.CoberturaService;
@@ -58,7 +60,7 @@ public class PadocaRunner implements CommandLineRunner {
             System.out.println( "Opção de tamanho inválida!" );
             return;
         }
-        String tamanhoSelecionado = String.valueOf( TamanhoTorta.values()[ tamanho - 1 ] );
+	    String tamanhoSelecionado = TamanhoTorta.values()[tamanho - 1].getDescricao();
 
         //CAMADAS
         System.out.println( "\nQuantidade de camadas disponíveis: " );
@@ -74,13 +76,13 @@ public class PadocaRunner implements CommandLineRunner {
             System.out.println( "Opção de camadas inválida!" );
             return;
         }
-        String camadasSelecionado = String.valueOf( CamadaTorta.values()[ tamanho - 1 ] );
+	    String camadasSelecionado = CamadaTorta.values()[camadas - 1].getDescricao();
 
         //RECHEIO
-        List<String> recheiosEscolhidos = new ArrayList<>();
-
         System.out.println( "\nRecheios disponíveis: " );
-        List<String> listaRecheios = new ArrayList<>();
+	    List< String > recheiosEscolhidos = new ArrayList<>();
+	    List< String > listaRecheios = new ArrayList<>();
+
         int r = 1;
         if (escolhaTorta == 1) {
             for (RecheioDoceTorta recheioOpcao : RecheioService.listarRecheios()) {
@@ -106,18 +108,18 @@ public class PadocaRunner implements CommandLineRunner {
             System.out.println( "\nEscolha o recheio: " );
             int opcaoRecheio = scanner.nextInt();
             scanner.nextLine();
-            if (opcaoRecheio < 1 || opcaoRecheio > listaRecheios.size()) {
+            if ( opcaoRecheio < 1 || opcaoRecheio > listaRecheios.size() ) {
                 System.out.println( "Opção inválida!" );
                 return;
             }
 
-            String recheioSelecionado = listaRecheios.get(opcaoRecheio - 1);
-            for (int i = 0; i < camadas; i++) {
-                recheiosEscolhidos.add(recheioSelecionado);
+            String recheioSelecionado = listaRecheios.get( opcaoRecheio - 1 );
+            for ( int i = 0; i < camadas; i++ ) {
+                recheiosEscolhidos.add( recheioSelecionado );
             }
 
-        } else if (escolha == 2) {
-            for (int i = 0; i < camadas; i++) {
+        } else if ( escolha == 2 ) {
+            for ( int i = 0; i < camadas; i++ ) {
                 System.out.println( "\nEscolha o recheio para a camada " + (i + 1) + ": " );
                 int opcaoRecheio = scanner.nextInt();
                 scanner.nextLine();
@@ -132,14 +134,14 @@ public class PadocaRunner implements CommandLineRunner {
             return;
         }
 
-        System.out.println( "Recheios escolhidos: " );
+        System.out.println( "\nRecheios escolhidos: " );
         for ( int i = 0; i < recheiosEscolhidos.size(); i++ ) {
             System.out.println( "Camada " + (i + 1) + ": " + recheiosEscolhidos.get( i ) );
         }
-        String recheioSelecionado = String.valueOf( CamadaTorta.values()[ tamanho - 1 ] );
 
         //COBERTURA
         System.out.println( "\nCoberturas disponíveis: " );
+	    String coberturaSelecionada = "";
         if ( escolhaTorta == 1 ) {
             int i = 1;
             for ( CoberturaDoceTorta coberturaOpcao : CoberturaService.listarCobertura() ) {
@@ -153,6 +155,7 @@ public class PadocaRunner implements CommandLineRunner {
                 System.out.println( "Opção de recheio inválido!" );
                 return;
             }
+	        coberturaSelecionada = CoberturaDoceTorta.values()[ cobertura - 1 ].getDescricao();
         } else if ( escolhaTorta == 2 ) {
             int i = 1;
             for ( CoberturaSalgadaTorta coberturaOpcao : CoberturaService.listarCoberturaSalgado() ) {
@@ -166,19 +169,40 @@ public class PadocaRunner implements CommandLineRunner {
                 System.out.println( "Opção de recheio inválido!" );
                 return;
             }
+	        coberturaSelecionada = CoberturaSalgadaTorta.values()[ cobertura - 1 ].getDescricao();
         } else {
             System.out.println( "Torta não identificada" );
         }
-        String coberturaSelecionado = String.valueOf( CamadaTorta.values()[ tamanho - 1 ] );
+
 
         //TORTA PRONTA
         Torta torta = pedido.montarTorta();
         torta.setTamanho( tamanhoSelecionado );
         torta.setCamada( camadasSelecionado );
-        torta.setRecheio( recheioSelecionado );
-        torta.setCobertura( coberturaSelecionado );
+        torta.setRecheio( String.join(", ", recheiosEscolhidos) );
+        torta.setCobertura( coberturaSelecionada );
+
+        //EXTRAS
+        System.out.println( "\nDeseja adicionar algum extra?" );
+        System.out.println( "1 - Embalagem Especial" );
+        System.out.println( "2 - Cartão Presente" );
+        System.out.println( "3 - Sem extras" );
+        int opcaoExtra = scanner.nextInt();
+        scanner.nextLine();
+
+        switch ( opcaoExtra ) {
+            case 1:
+                torta = new EmbalagemEspecial( torta );
+                break;
+            case 2:
+                torta = new CartaoPresente( torta );
+                break;
+            default:
+                break;
+        }
 
         torta.preparar();
-        pedido.entregar();
+        torta.exibirDetalhes();
+//        pedido.entregar();
     }
 }
