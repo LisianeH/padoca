@@ -10,6 +10,9 @@ import com.doceria.padoca.factory.PedidoDoce;
 import com.doceria.padoca.factory.PedidoSalgado;
 import com.doceria.padoca.factory.Pedido;
 import com.doceria.padoca.service.TamanhoService;
+import com.doceria.padoca.strategy.EntregaExpressa;
+import com.doceria.padoca.strategy.EntregaNormal;
+import com.doceria.padoca.strategy.Retirada;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -69,7 +72,7 @@ public class PadocaRunner implements CommandLineRunner {
             System.out.println( c + " - " + camadaOpcao.getDescricao() );
             c++;
         }
-        System.out.println( "Escolha a quantidade de camadas: " );
+        System.out.println( "\nEscolha a quantidade de camadas: " );
         int camadas = scanner.nextInt();
         scanner.nextLine();
         if ( camadas < 1 || camadas > TamanhoTorta.values().length ) {
@@ -203,6 +206,31 @@ public class PadocaRunner implements CommandLineRunner {
 
         torta.preparar();
         torta.exibirDetalhes();
-//        pedido.entregar();
+
+        //ENTREGA
+        System.out.println("\nEscolha o tipo de entrega:");
+        System.out.println("1 - Normal ( 3 dias )");
+        System.out.println("2 - Expressa ( 24 horas )");
+        System.out.println("3 - Retirada na Loja ( Retirada no próximo dia )");
+
+        int opcaoEntrega = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (opcaoEntrega) {
+            case 1:
+                pedido.setEntrega( new EntregaNormal() );
+                break;
+            case 2:
+                pedido.setEntrega( new EntregaExpressa() );
+                break;
+            case 3:
+                pedido.setEntrega( new Retirada() );
+                break;
+            default:
+                System.out.println( "Opção inválida." );
+                break;
+        }
+
+        pedido.realizarEntrega();
     }
 }
