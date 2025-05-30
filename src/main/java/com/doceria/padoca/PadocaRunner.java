@@ -14,6 +14,7 @@ import com.doceria.padoca.strategy.EntregaExpressa;
 import com.doceria.padoca.strategy.EntregaNormal;
 import com.doceria.padoca.strategy.Retirada;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Scanner;
 
 @Component
+@Profile("!test")
 public class PadocaRunner implements CommandLineRunner {
 
     @Override
@@ -102,7 +104,7 @@ public class PadocaRunner implements CommandLineRunner {
         }
 
         System.out.println( "\nA sua torta será: " );
-        System.out.println( "1 - Toda com torta somente com um sabor" );
+        System.out.println( "1 - Toda torta com o mesmo recheio" );
         System.out.println( "2 - Um recheio por camada" );
         int escolha = scanner.nextInt();
         scanner.nextLine();
@@ -232,5 +234,8 @@ public class PadocaRunner implements CommandLineRunner {
         }
 
         pedido.realizarEntrega();
+
+        System.out.println( "\nPedido finalizado. Volte sempre!" );
+        System.exit( 0 );
     }
 }
