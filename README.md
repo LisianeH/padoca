@@ -1,6 +1,6 @@
 # 📖 Padoca Delivery — Sistema de Montagem de Tortas
 
-Projeto desenvolvido para a disciplina **Engenharia de Software II**, com o objetivo de aplicar e demonstrar na prática o uso de padrões de projeto e boas práticas, desenvolvido em Java.
+Projeto desenvolvido para a disciplina **Engenharia de Software II**, com o objetivo de aplicar o uso de padrões de projeto e boas práticas, desenvolvido em Java.
 
 A aplicação simula um sistema de delivery de tortas, permitindo que o usuário personalize sua torta interativamente via console.
 
@@ -20,17 +20,19 @@ A aplicação simula um sistema de delivery de tortas, permitindo que o usuário
 O projeto foi estruturado de forma a manter uma separação clara entre responsabilidades, agrupando classes por contexto:
 
 - **package `model`**: contém os modelos de domínio da aplicação e as classes enum responsáveis por representar valores fixos como tipos de recheio, cobertura, tamanho e camada, deixando mais organizado sem o uso do banco de dados.
-- **package `factory`**: concentra as implementações dos padrões de projeto, como o **Factory Method**.
 - **package `service`**: armazena os serviços responsáveis pelas regras de montagem e interação com o usuário no terminal.
-- **package `documents`**: reúne toda a documentação explicativa sobre cada padrão de código aplicado no projeto.
+- **package `documents`**: reúne toda a documentação explicativa sobre cada padrão de código aplicado no projeto, além das midias com foto da arquitetura e vídeo funcional do projeto.
+- **package `factory`**: concentra as implementações do padrão de projeto **Factory Method**.
+- **package `decorator`**: concentra as implementações do padrão de código **Decorator**.
+- **package `strategy`**: responsável pelas implementações do padrão **Strategy**.
 
 ---
 
 ## 💡 Padrões de Projeto Utilizados
 
 - **Factory Method**: para montagem dinâmica de tortas conforme o tipo (doce ou salgada).
-- **Strategy** *(planejado)*: para permitir variações de comportamento na montagem.
-- **Decorator** *(planejado)*: para futuras extensões como adicionais e bordas.
+- **Decorator**: utilizado para adicionar dinamicamente funcionalidades extras, sem modificar as classes base.
+- **Strategy**: permitindo definir diferentes estratégias e sendo atribuída dinamicamente a um pedido, proporcionando flexibilidade e desacoplamento no processo de entrega.
 
 Todos os padrões estão devidamente documentados no package `documents`, com descrição conceitual e explicação sobre sua aplicação no projeto.
 
@@ -38,13 +40,15 @@ Todos os padrões estão devidamente documentados no package `documents`, com de
 
 ## 🎯 Funcionalidades
 
-- Montagem de tortas **doces** ou **salgadas**.
+- Montagem personalizada de tortas **doces** ou **salgadas**.
 - Definição de:
   - Tamanho da torta.
   - Quantidade de camadas.
   - Tipo de recheio.
   - Cobertura.
-- Exibição de mensagem de confirmação ao final com a torta montada e entrega realizada.
+  - Opções de extra (embalagem especial, cartão com mensagem).
+  - Entrega.
+- Exibição de mensagem de confirmação ao final com a torta montada.
 
 ---
 
